@@ -24,13 +24,13 @@ export default function ColinItineraryPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/40" />
         <div className="relative z-10 container mx-auto px-8 md:px-16 lg:px-20 text-center">
           <p className="text-[10px] tracking-[0.3em] uppercase text-white/60 mb-8">
-            A Gift from Riad di Siena
+            A Suggested Motorcycle Ride from Marrakech
           </p>
           <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white leading-[1.2] max-w-4xl mx-auto mb-6">
             The "Desert & Dust" Loop
           </h1>
           <p className="text-white/60 text-sm tracking-[0.15em] uppercase">
-            For Colin DeVillers & Wife
+            For Mr. & Mrs. Colin DeVillers
           </p>
         </div>
       </section>
@@ -309,11 +309,8 @@ export default function ColinItineraryPage() {
       <section className="py-20 md:py-28 bg-[#1a1916] text-white">
         <div className="container mx-auto px-8 md:px-16 lg:px-20">
           <div className="max-w-3xl mx-auto text-center">
-            <p className="font-serif text-2xl md:text-3xl lg:text-4xl leading-[1.3] text-white/90 mb-8">
+            <p className="font-serif text-2xl md:text-3xl lg:text-4xl leading-[1.3] text-white/90">
               Enjoy the ride, Colin.
-            </p>
-            <p className="text-white/60 text-sm">
-              With warmth from Riad di Siena
             </p>
           </div>
         </div>
