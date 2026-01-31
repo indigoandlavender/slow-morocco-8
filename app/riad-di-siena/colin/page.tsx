@@ -218,10 +218,16 @@ export default function ColinItineraryPage() {
                 <p className="text-[11px] tracking-[0.15em] uppercase text-foreground/40 mb-2">
                   The Landscape
                 </p>
-                <p className="text-foreground/60 leading-relaxed">
+                <p className="text-foreground/60 leading-relaxed mb-4">
                   From the lake, head into the Agafay Desert. This isn't sand dunes (like the Sahara);
                   it's "stony desert" with rolling white hills.
                 </p>
+                <div className="p-4 border-l-2 border-foreground/20">
+                  <p className="text-sm text-foreground/70 italic">
+                    Geologically, this is a hammada—a barren, rocky plateau swept clean by wind.
+                    The Berbers call it the "stone desert." It feels like riding on the surface of the moon.
+                  </p>
+                </div>
               </div>
 
               <div>
