@@ -1,4 +1,14 @@
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
+
+const DesertDustRouteMap = dynamic(() => import("@/components/DesertDustRouteMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[400px] md:h-[450px] bg-[#f5f0e8] flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+    </div>
+  ),
+});
 
 export const metadata: Metadata = {
   title: "Desert & Dust Loop | A Gift for Colin DeVillers",
@@ -26,19 +36,27 @@ export default function ColinItineraryPage() {
       </section>
 
       {/* Introduction */}
-      <section className="py-24 md:py-32">
+      <section className="py-20 md:py-28">
         <div className="container mx-auto px-8 md:px-16 lg:px-20">
           <div className="max-w-3xl">
-            <p className="text-foreground/60 leading-relaxed text-lg mb-8">
-              Colin, I've done some scouting for your motorcycle rental while you're here.
-              Since you ride a 900cc in the States, I wanted to find something that wouldn't
-              feel like a step down in performance while still fitting that 'cafe racer' style you like.
-            </p>
-            <p className="text-foreground/80 leading-relaxed text-lg font-medium">
+            <p className="text-foreground/80 leading-relaxed text-lg">
               This 1-day loop (~160km) takes you from the lush green foothills of the Atlas
               into the Martian landscapes of the Agafay Desert.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Interactive Map */}
+      <section className="py-16 md:py-20">
+        <div className="container mx-auto px-8 md:px-16 lg:px-20">
+          <p className="text-[10px] tracking-[0.3em] uppercase text-foreground/40 mb-6">
+            Your Route
+          </p>
+          <DesertDustRouteMap />
+          <p className="text-center text-sm text-foreground/50 mt-4">
+            ~160km loop • Perfect for a Royal Enfield Interceptor 650
+          </p>
         </div>
       </section>
 
@@ -84,14 +102,6 @@ export default function ColinItineraryPage() {
                   'thump' along at a relaxed pace through the palm groves.
                 </p>
               </div>
-            </div>
-
-            <div className="mt-12 p-6 bg-white/50">
-              <p className="text-foreground/70 text-sm leading-relaxed">
-                I have the WhatsApp contacts for the top agencies (M2R and Wild Riders) and can
-                easily check who has the best 650cc or 900cc inventory available for your visit.
-                Which style should I prioritize for you?
-              </p>
             </div>
           </div>
         </div>
