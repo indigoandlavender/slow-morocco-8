@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import dynamic from "next/dynamic";
 
 const DesertDustRouteMap = dynamic(() => import("@/components/DesertDustRouteMap"), {
@@ -20,7 +21,14 @@ export default function ColinItineraryPage() {
   return (
     <div className="bg-background min-h-screen">
       {/* Hero */}
-      <section className="relative h-[60vh] md:h-[70vh] flex items-center justify-center bg-[#2c2825]">
+      <section className="relative h-[60vh] md:h-[70vh] flex items-center justify-center">
+        <Image
+          src="https://res.cloudinary.com/drstfu5yr/image/upload/v1769870442/IndigoLavender_Ultra_photorealistic._National_Geographic_styl_691947a6-096d-4853-bd3c-26f6f1439626_1_xuci2d.png"
+          alt="Motorcycle ride through Morocco"
+          fill
+          className="object-cover"
+          priority
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/40" />
         <div className="relative z-10 container mx-auto px-8 md:px-16 lg:px-20 text-center">
           <p className="text-[10px] tracking-[0.3em] uppercase text-white/60 mb-8">
