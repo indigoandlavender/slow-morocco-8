@@ -323,6 +323,26 @@ export default function ColinItineraryPage() {
           </div>
         </div>
       </section>
+
+      {/* Start the Conversation CTA */}
+      <section className="py-24 md:py-32 bg-[#f5f2ed]">
+        <div className="container mx-auto px-8 md:px-16 lg:px-20 text-center">
+          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl mb-6">
+            This journey is a starting point.
+          </h2>
+          <p className="text-foreground/60 max-w-2xl mx-auto mb-10 text-sm md:text-base leading-relaxed">
+            These itineraries aren't fixed. They're designed to bend. Add a day in the desert.
+            Skip the city. Stay longer where something pulls you. This is your journey—we shape it
+            around what matters to you.
+          </p>
+          <a
+            href="/plan-your-trip"
+            className="inline-block bg-foreground text-background px-10 py-4 text-xs tracking-[0.15em] uppercase hover:bg-foreground/90 transition-colors"
+          >
+            Start the Conversation
+          </a>
+        </div>
+      </section>
     </div>
   );
 }
