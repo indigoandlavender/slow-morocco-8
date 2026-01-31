@@ -23,7 +23,7 @@ export default function ColinItineraryPage() {
       {/* Hero */}
       <section className="relative h-[60vh] md:h-[70vh] flex items-center justify-center">
         <Image
-          src="https://res.cloudinary.com/drstfu5yr/image/upload/v1769870442/IndigoLavender_Ultra_photorealistic._National_Geographic_styl_691947a6-096d-4853-bd3c-26f6f1439626_1_xuci2d.png"
+          src="https://res.cloudinary.com/drstfu5yr/image/upload/v1769870529/motorbike_nmjsx0.png"
           alt="Motorcycle ride through Morocco"
           fill
           className="object-cover"
