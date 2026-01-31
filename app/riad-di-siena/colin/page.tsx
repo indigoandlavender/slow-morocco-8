@@ -238,10 +238,16 @@ export default function ColinItineraryPage() {
                 <p className="text-[11px] tracking-[0.15em] uppercase text-foreground/40 mb-2">
                   Golden Hour
                 </p>
-                <p className="text-foreground/60 leading-relaxed">
+                <p className="text-foreground/60 leading-relaxed mb-4">
                   Aim to be riding through Agafay as the sun begins to dip. The light turns the hills
                   a deep orange.
                 </p>
+                <div className="p-4 border-l-2 border-foreground/20">
+                  <p className="text-sm text-foreground/70 italic">
+                    Since it's winter, sunset comes early—around 6pm. You could easily linger for
+                    the full show before cruising back to Marrakech under the first stars.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
