@@ -14,9 +14,18 @@ export async function GET(request: Request) {
     // Map to consistent format - matching your exact column names
     const formattedJourneys = journeys
       .filter((j: any) => {
-        if (includeHidden) return true; // Return all journeys when includeHidden is true
+        // Check Published status
         const pub = String(j.Published || "").toLowerCase().trim();
-        return pub === "true" || pub === "yes" || pub === "1";
+        const isPublished = pub === "true" || pub === "yes" || pub === "1";
+        
+        // Check Show_on_Journeys_Page
+        const showOnPage = String(j.Show_on_Journeys_Page || "").toLowerCase().trim();
+        const shouldShowOnPage = showOnPage === "true" || showOnPage === "yes" || showOnPage === "1";
+        
+        // includeHidden=true returns all published journeys (for search)
+        // Default returns only journeys marked to show on journeys page
+        if (includeHidden) return isPublished;
+        return isPublished && shouldShowOnPage;
       })
       .map((j: any) => {
         const pub = String(j.Published || "").toLowerCase().trim();
