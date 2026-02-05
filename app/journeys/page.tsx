@@ -57,7 +57,7 @@ export default function JourneysPage() {
   useEffect(() => {
     // Fetch ALL content types
     Promise.all([
-      fetch("/api/journeys?includeHidden=true").then(r => r.json()),
+      fetch("/api/journeys").then(r => r.json()),
       fetch("/api/day-trips").then(r => r.json()),
     ])
       .then(([journeysData, dayTripsData]) => {
