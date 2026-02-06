@@ -56,6 +56,29 @@ glossaryData.forEach(category => {
       termMap.set('maalems', { id: term.id, term: 'maalems' });
     }
     
+    // Textile variations
+    if (lowerTerm === 'kilim') termMap.set('kilims', { id: term.id, term: 'kilims' });
+    if (lowerTerm === 'boucherouite') {
+      termMap.set('boucherouite rugs', { id: term.id, term: 'boucherouite rugs' });
+      termMap.set('boucherouite rug', { id: term.id, term: 'boucherouite rug' });
+      termMap.set('rag rug', { id: term.id, term: 'rag rug' });
+      termMap.set('rag rugs', { id: term.id, term: 'rag rugs' });
+    }
+    if (lowerTerm === 'beni ourain') {
+      termMap.set('beni ourain rug', { id: term.id, term: 'Beni Ourain rug' });
+      termMap.set('beni ourain rugs', { id: term.id, term: 'Beni Ourain rugs' });
+      termMap.set('beni ouarain', { id: term.id, term: 'Beni Ouarain' });
+    }
+    if (lowerTerm === 'hanbel') termMap.set('hanbels', { id: term.id, term: 'hanbels' });
+    if (lowerTerm === 'azilal') {
+      termMap.set('azilal rug', { id: term.id, term: 'Azilal rug' });
+      termMap.set('azilal rugs', { id: term.id, term: 'Azilal rugs' });
+    }
+    if (lowerTerm === 'sabra') {
+      termMap.set('sabra silk', { id: term.id, term: 'sabra silk' });
+      termMap.set('cactus silk', { id: term.id, term: 'cactus silk' });
+    }
+    
     // Landmark variations
     if (lowerTerm === 'medersa ben youssef') {
       termMap.set('ben youssef medersa', { id: term.id, term: 'Ben Youssef Medersa' });

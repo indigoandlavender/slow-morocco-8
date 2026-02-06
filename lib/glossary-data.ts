@@ -12,6 +12,10 @@ export interface GlossaryTerm {
   context?: string;
   related?: string[];
   seeAlso?: string[]; // links to other glossary terms by id
+  // Cross-links to content
+  relatedJourneys?: { slug: string; title: string }[];
+  relatedStories?: { slug: string; title: string }[];
+  relatedPlaces?: { slug: string; title: string }[];
 }
 
 export interface GlossaryCategory {
@@ -38,6 +42,17 @@ export const glossaryData: GlossaryCategory[] = [
         context: "The city's name may derive from Amazigh 'mur n akush' (Land of God). The distinctive red-ochre buildings gave Morocco its nickname 'The Red City' and influenced the country's name in several languages.",
         related: ["imperial city", "medina", "Red City"],
         seeAlso: ["jemaa-el-fna", "koutoubia-mosque", "medina"],
+        relatedJourneys: [
+          { slug: "7-Day-Atlas-to-Desert", title: "Atlas to Desert Journey" },
+          { slug: "3-Day-Marrakech-Essaouira", title: "Marrakech & Essaouira" },
+        ],
+        relatedStories: [
+          { slug: "the-language-of-walls", title: "The Language of Walls" },
+          { slug: "the-garden-within", title: "The Garden Within" },
+        ],
+        relatedPlaces: [
+          { slug: "marrakech", title: "Marrakech" },
+        ],
       },
       {
         id: "fes",
@@ -50,6 +65,17 @@ export const glossaryData: GlossaryCategory[] = [
         context: "Fes was Morocco's capital for most of its history until 1912. The city remains the center of traditional crafts, religious learning, and Moroccan haute cuisine. The red felt hat 'fez' takes its name from the city.",
         related: ["imperial city", "Al-Qarawiyyin", "medina"],
         seeAlso: ["fes-el-bali", "chouara-tannery", "fondouk"],
+        relatedJourneys: [
+          { slug: "8-Day-Imperial-Cities", title: "Imperial Cities Journey" },
+          { slug: "10-Day-Northern-Morocco", title: "Northern Morocco" },
+        ],
+        relatedStories: [
+          { slug: "the-geometry-of-faith", title: "The Geometry of Faith" },
+          { slug: "the-tanners-art", title: "The Tanner's Art" },
+        ],
+        relatedPlaces: [
+          { slug: "fes", title: "Fes" },
+        ],
       },
       {
         id: "tangier",
@@ -121,6 +147,18 @@ export const glossaryData: GlossaryCategory[] = [
         context: "The valley was a crucial trans-Saharan trade route, with caravans carrying gold, salt, and slaves. Today it's known for dates—over 4 million palm trees produce some of Morocco's finest varieties.",
         related: ["palm oasis", "trans-Saharan trade", "Zagora", "Agdz"],
         seeAlso: ["kasbah", "ksar"],
+        relatedJourneys: [
+          { slug: "10-Day-Southern-Oases", title: "Southern Oases Route" },
+          { slug: "7-Day-Atlas-to-Desert", title: "Atlas to Desert" },
+        ],
+        relatedStories: [
+          { slug: "the-fortress-of-grain", title: "The Fortress of Grain" },
+          { slug: "the-last-caravanserai", title: "The Last Caravanserai" },
+        ],
+        relatedPlaces: [
+          { slug: "zagora", title: "Zagora" },
+          { slug: "tamegroute", title: "Tamegroute" },
+        ],
       },
       {
         id: "high-atlas",
@@ -133,6 +171,18 @@ export const glossaryData: GlossaryCategory[] = [
         context: "The High Atlas is home to Amazigh communities who have maintained traditional lifestyles in remote villages. Imlil is the main trekking base; the Tizi n'Tichka pass (2,260m) is the main route to the south.",
         related: ["Jebel Toubkal", "Imlil", "Tizi n'Tichka", "Amazigh"],
         seeAlso: ["amazigh"],
+        relatedJourneys: [
+          { slug: "7-Day-Atlas-Valleys", title: "Atlas Valleys Journey" },
+          { slug: "5-Day-Toubkal-Trek", title: "Toubkal Trek" },
+        ],
+        relatedStories: [
+          { slug: "the-silence-of-stone", title: "The Silence of Stone" },
+          { slug: "the-language-of-wool", title: "The Language of Wool" },
+        ],
+        relatedPlaces: [
+          { slug: "imlil", title: "Imlil" },
+          { slug: "ouirgane", title: "Ouirgane" },
+        ],
       },
       {
         id: "middle-atlas",
@@ -177,6 +227,18 @@ export const glossaryData: GlossaryCategory[] = [
         context: "Only about 25% of the Sahara is sand dunes—the rest is rock and gravel. Morocco's most accessible Saharan dunes are at Erg Chebbi (Merzouga) and Erg Chigaga (M'Hamid).",
         related: ["Merzouga", "M'Hamid", "desert"],
         seeAlso: ["erg", "hammada", "reg", "erg-chebbi"],
+        relatedJourneys: [
+          { slug: "3-Day-Desert-Experience", title: "Sahara Desert Experience" },
+          { slug: "8-Day-Desert-Circle", title: "The Desert Circle" },
+        ],
+        relatedStories: [
+          { slug: "the-blue-men", title: "The Blue Men" },
+          { slug: "stars-over-sand", title: "Stars Over Sand" },
+        ],
+        relatedPlaces: [
+          { slug: "merzouga", title: "Merzouga" },
+          { slug: "mhamid", title: "M'Hamid" },
+        ],
       },
       {
         id: "souss-valley",
@@ -268,6 +330,14 @@ export const glossaryData: GlossaryCategory[] = [
         context: "Most riads in the medinas have been converted to guesthouses, offering an intimate alternative to hotels.",
         related: ["Moroccan architecture", "courtyard house", "traditional accommodation"],
         seeAlso: ["dar", "medina"],
+        relatedStories: [
+          { slug: "the-garden-within", title: "The Garden Within" },
+          { slug: "architecture-of-privacy", title: "Architecture of Privacy" },
+        ],
+        relatedPlaces: [
+          { slug: "marrakech", title: "Marrakech" },
+          { slug: "fes", title: "Fes" },
+        ],
       },
       {
         id: "dar",
@@ -289,6 +359,18 @@ export const glossaryData: GlossaryCategory[] = [
         context: "The kasbahs of the Draa Valley and Dades Gorge date from the 17th-19th centuries, built to protect caravan routes.",
         related: ["fortress", "citadel", "pisé", "rammed earth"],
         seeAlso: ["ksar", "pise"],
+        relatedJourneys: [
+          { slug: "7-Day-Kasbahs-Route", title: "Route of the Kasbahs" },
+          { slug: "10-Day-Southern-Oases", title: "Southern Oases Route" },
+        ],
+        relatedStories: [
+          { slug: "the-fortress-of-grain", title: "The Fortress of Grain" },
+          { slug: "castles-of-clay", title: "Castles of Clay" },
+        ],
+        relatedPlaces: [
+          { slug: "ait-benhaddou", title: "Aït Benhaddou" },
+          { slug: "ouarzazate", title: "Ouarzazate" },
+        ],
       },
       {
         id: "ksar",
@@ -311,6 +393,18 @@ export const glossaryData: GlossaryCategory[] = [
         context: "Fes el-Bali is the world's largest car-free urban area and one of the best-preserved medieval cities.",
         related: ["old city", "walled city", "Fes el-Bali", "historic quarter"],
         seeAlso: ["derb", "souk"],
+        relatedJourneys: [
+          { slug: "8-Day-Imperial-Cities", title: "Imperial Cities Journey" },
+        ],
+        relatedStories: [
+          { slug: "the-labyrinth", title: "The Labyrinth" },
+          { slug: "streets-without-names", title: "Streets Without Names" },
+        ],
+        relatedPlaces: [
+          { slug: "marrakech", title: "Marrakech" },
+          { slug: "fes", title: "Fes" },
+          { slug: "chefchaouen", title: "Chefchaouen" },
+        ],
       },
       {
         id: "derb",
@@ -349,6 +443,14 @@ export const glossaryData: GlossaryCategory[] = [
         context: "Marrakech's souks are organized by craft: the souk of dyers, the souk of metalworkers, the souk of leather goods.",
         related: ["market", "bazaar", "marketplace"],
         seeAlso: ["medina", "fondouk"],
+        relatedStories: [
+          { slug: "the-way-of-the-souk", title: "The Way of the Souk" },
+          { slug: "merchants-and-makers", title: "Merchants and Makers" },
+        ],
+        relatedPlaces: [
+          { slug: "marrakech", title: "Marrakech" },
+          { slug: "fes", title: "Fes" },
+        ],
       },
       {
         id: "fondouk",
@@ -371,6 +473,14 @@ export const glossaryData: GlossaryCategory[] = [
         context: "Zellige work requires years of apprenticeship. The craft is centered in Fes, where master craftsmen (maâlems) maintain techniques unchanged for centuries.",
         related: ["mosaic", "tilework", "Islamic geometric art", "Moroccan tiles"],
         seeAlso: ["maalem"],
+        relatedStories: [
+          { slug: "the-geometry-of-faith", title: "The Geometry of Faith" },
+          { slug: "the-last-zellige-master", title: "The Last Zellige Master" },
+        ],
+        relatedPlaces: [
+          { slug: "fes", title: "Fes" },
+          { slug: "meknes", title: "Meknes" },
+        ],
       },
       {
         id: "tadelakt",
@@ -410,6 +520,20 @@ export const glossaryData: GlossaryCategory[] = [
         context: "Approximately 40% of Moroccans are ethnically Amazigh, with the highest concentrations in the Atlas Mountains and Rif.",
         related: ["Berber", "indigenous North African", "Imazighen"],
         seeAlso: ["tamazight", "tifinagh"],
+        relatedJourneys: [
+          { slug: "7-Day-Atlas-Valleys", title: "Atlas Valleys Journey" },
+          { slug: "10-Day-Southern-Oases", title: "Southern Oases Route" },
+        ],
+        relatedStories: [
+          { slug: "the-free-people", title: "The Free People" },
+          { slug: "the-language-of-wool", title: "The Language of Wool" },
+          { slug: "symbols-in-the-weave", title: "Symbols in the Weave" },
+        ],
+        relatedPlaces: [
+          { slug: "imlil", title: "Imlil" },
+          { slug: "ouirgane", title: "Ouirgane" },
+          { slug: "ait-benhaddou", title: "Aït Benhaddou" },
+        ],
       },
       {
         id: "tamazight",
@@ -442,6 +566,17 @@ export const glossaryData: GlossaryCategory[] = [
         context: "The Essaouira Gnaoua Festival each June is the largest celebration of this tradition.",
         related: ["Gnawa", "spiritual music", "trance music", "African diaspora"],
         seeAlso: ["lila", "maalem"],
+        relatedJourneys: [
+          { slug: "7-Day-Music-of-Morocco", title: "Music of Morocco" },
+        ],
+        relatedStories: [
+          { slug: "the-sound-of-trance", title: "The Sound of Trance" },
+          { slug: "spirit-possession-healing", title: "Spirit Possession & Healing" },
+        ],
+        relatedPlaces: [
+          { slug: "essaouira", title: "Essaouira" },
+          { slug: "marrakech", title: "Marrakech" },
+        ],
       },
       {
         id: "lila",
@@ -474,6 +609,58 @@ export const glossaryData: GlossaryCategory[] = [
         definition: "A religious festival or pilgrimage, typically honoring a local saint (marabout). Moussems combine religious devotion with markets, music, and social gathering.",
         context: "The Imilchil Marriage Moussem in the High Atlas is one of Morocco's most famous, where young people traditionally chose marriage partners.",
         related: ["festival", "pilgrimage", "saint's day", "religious gathering"],
+      },
+      {
+        id: "tbourida",
+        term: "Tbourida",
+        pronunciation: "t-boo-REE-da",
+        arabicScript: "تبوريدة",
+        category: "people-culture",
+        definition: "A traditional Moroccan equestrian performance, also known as Fantasia. Riders in traditional dress charge in formation, firing antique rifles in synchronized volleys. A UNESCO-recognized intangible cultural heritage.",
+        context: "Tbourida originated as cavalry training and evolved into ceremonial display. Teams compete at moussems and festivals across Morocco.",
+        related: ["Fantasia", "equestrian", "horse riding", "gunpowder"],
+        relatedJourneys: [
+          { slug: "5-Day-Tbourida-Festival", title: "Tbourida by the Sea" },
+        ],
+        relatedStories: [
+          { slug: "riders-of-the-plain", title: "Riders of the Plain" },
+        ],
+      },
+      {
+        id: "hammam",
+        term: "Hammam",
+        pronunciation: "ha-MAM",
+        arabicScript: "حمام",
+        category: "people-culture",
+        definition: "A traditional public bathhouse, central to Moroccan social and cleansing rituals. Hammams feature a series of progressively hotter rooms, with scrubbing (gommage) using black soap and a rough mitt (kessa).",
+        context: "Historically, hammams served as social gathering spaces, especially for women. Every neighborhood has its local hammam alongside modern spas.",
+        related: ["bathhouse", "steam bath", "gommage", "kessa"],
+        relatedStories: [
+          { slug: "ritual-of-steam", title: "The Ritual of Steam" },
+        ],
+        relatedPlaces: [
+          { slug: "marrakech", title: "Marrakech" },
+          { slug: "fes", title: "Fes" },
+        ],
+      },
+      {
+        id: "argan",
+        term: "Argan",
+        pronunciation: "ar-GAN",
+        arabicScript: "أركان",
+        tifinagh: "ⴰⵔⴳⴰⵏ",
+        category: "people-culture",
+        definition: "An endemic tree species found only in Morocco's Souss region, producing nuts that are pressed into culinary and cosmetic oil. The argan forest is a UNESCO Biosphere Reserve.",
+        context: "Traditional production is done by women's cooperatives. Goats famously climb argan trees to eat the fruit, though staged photo opportunities should be avoided.",
+        related: ["argan oil", "Souss Valley", "women's cooperatives", "endemic species"],
+        relatedStories: [
+          { slug: "liquid-gold", title: "Liquid Gold" },
+          { slug: "the-argan-forest", title: "The Argan Forest" },
+        ],
+        relatedPlaces: [
+          { slug: "essaouira", title: "Essaouira" },
+          { slug: "taroudant", title: "Taroudant" },
+        ],
       },
     ],
   },
@@ -569,6 +756,17 @@ export const glossaryData: GlossaryCategory[] = [
         definition: "Both a conical clay cooking vessel and the slow-cooked stew prepared in it. The cone-shaped lid returns condensation to the dish, allowing cooking with minimal liquid.",
         context: "Regional variations are significant: Marrakech favors sweet-savory combinations; Fes uses more preserved lemons and olives.",
         related: ["Moroccan stew", "clay pot cooking", "slow cooking"],
+        relatedJourneys: [
+          { slug: "5-Day-Culinary-Journey", title: "Culinary Journey" },
+        ],
+        relatedStories: [
+          { slug: "the-slow-fire", title: "The Slow Fire" },
+          { slug: "clay-and-flame", title: "Clay and Flame" },
+        ],
+        relatedPlaces: [
+          { slug: "marrakech", title: "Marrakech" },
+          { slug: "fes", title: "Fes" },
+        ],
       },
       {
         id: "harira",
@@ -589,6 +787,9 @@ export const glossaryData: GlossaryCategory[] = [
         definition: "Steamed semolina granules, traditionally hand-rolled and served with vegetables and meat. Friday couscous after midday prayers is a Moroccan institution.",
         context: "Authentic couscous is steamed three times over a simmering stew; instant couscous is a pale imitation.",
         related: ["seksu", "semolina", "Friday lunch"],
+        relatedStories: [
+          { slug: "friday-ritual", title: "The Friday Ritual" },
+        ],
       },
       {
         id: "msemen",
@@ -766,6 +967,17 @@ export const glossaryData: GlossaryCategory[] = [
         context: "The blue color tradition has various explanations: Jewish residents painting homes to represent the sky and heaven, mosquito repellent properties, or simply keeping buildings cool. The medina was closed to foreigners until 1920.",
         related: ["Rif Mountains", "blue city", "medina", "Andalusian refugees"],
         seeAlso: ["medina"],
+        relatedJourneys: [
+          { slug: "10-Day-Northern-Morocco", title: "Northern Morocco" },
+          { slug: "7-Day-Rif-Mountains", title: "Rif Mountains Journey" },
+        ],
+        relatedStories: [
+          { slug: "the-blue-maze", title: "The Blue Maze" },
+          { slug: "fifty-shades-of-blue", title: "Fifty Shades of Blue" },
+        ],
+        relatedPlaces: [
+          { slug: "chefchaouen", title: "Chefchaouen" },
+        ],
       },
       {
         id: "erg-chebbi",
@@ -777,6 +989,17 @@ export const glossaryData: GlossaryCategory[] = [
         context: "Erg Chebbi is Morocco's most accessible Saharan dune experience, about 9 hours from Marrakech. The area is home to the Ait Khebbach nomads and seasonal flamingo populations at Dayet Srji lake.",
         related: ["Sahara", "Merzouga", "sand dunes", "desert"],
         seeAlso: ["erg"],
+        relatedJourneys: [
+          { slug: "3-Day-Desert-Experience", title: "Sahara Desert Experience" },
+          { slug: "8-Day-Desert-Circle", title: "The Desert Circle" },
+        ],
+        relatedStories: [
+          { slug: "stars-over-sand", title: "Stars Over Sand" },
+          { slug: "the-blue-men", title: "The Blue Men" },
+        ],
+        relatedPlaces: [
+          { slug: "merzouga", title: "Merzouga" },
+        ],
       },
       {
         id: "todra-gorge",
@@ -787,6 +1010,12 @@ export const glossaryData: GlossaryCategory[] = [
         definition: "A canyon carved by the Todra River through the eastern High Atlas, with sheer limestone walls rising 300 meters on either side. At its narrowest point, the gorge is only 10 meters wide.",
         context: "The gorge is a popular rock climbing destination with routes for all skill levels. The paved road through the canyon passes traditional Berber villages and palm oases.",
         related: ["High Atlas", "canyon", "rock climbing", "Tinghir"],
+        relatedJourneys: [
+          { slug: "10-Day-Southern-Oases", title: "Southern Oases Route" },
+        ],
+        relatedPlaces: [
+          { slug: "tinghir", title: "Tinghir" },
+        ],
       },
       {
         id: "dades-valley",
@@ -798,6 +1027,16 @@ export const glossaryData: GlossaryCategory[] = [
         context: "The valley was a crucial segment of trans-Saharan trade routes. Today it's famous for its roses—the annual Rose Festival in Kelaat M'Gouna celebrates the harvest used for rosewater and cosmetics.",
         related: ["High Atlas", "kasbahs", "Rose Valley", "Kelaat M'Gouna"],
         seeAlso: ["kasbah"],
+        relatedJourneys: [
+          { slug: "7-Day-Kasbahs-Route", title: "Route of the Kasbahs" },
+        ],
+        relatedStories: [
+          { slug: "valley-of-roses", title: "Valley of Roses" },
+        ],
+        relatedPlaces: [
+          { slug: "kelaat-mgouna", title: "Kelaat M'Gouna" },
+          { slug: "boumalne-dades", title: "Boumalne Dades" },
+        ],
       },
       {
         id: "essaouira-medina",
@@ -809,6 +1048,132 @@ export const glossaryData: GlossaryCategory[] = [
         context: "Once called Mogador, the city served as Morocco's primary trading port. Today it's known for wind sports, its annual Gnaoua World Music Festival, and a thriving arts scene. Jimi Hendrix famously visited in 1969.",
         related: ["Atlantic coast", "UNESCO", "Gnaoua", "port city"],
         seeAlso: ["gnawa", "medina"],
+        relatedJourneys: [
+          { slug: "3-Day-Marrakech-Essaouira", title: "Marrakech & Essaouira" },
+        ],
+        relatedStories: [
+          { slug: "the-wind-city", title: "The Wind City" },
+          { slug: "port-of-timbuktu", title: "Port of Timbuktu" },
+        ],
+        relatedPlaces: [
+          { slug: "essaouira", title: "Essaouira" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "textiles-weaving",
+    title: "Textiles & Weaving",
+    description: "Traditional Moroccan textiles, weaving techniques, and the cultural significance of rugs and fabrics.",
+    terms: [
+      {
+        id: "kilim",
+        term: "Kilim",
+        pronunciation: "kee-LEEM",
+        arabicScript: "كليم",
+        category: "textiles-weaving",
+        definition: "A flat-woven textile without pile, created by tightly interweaving warp and weft threads. Moroccan kilims feature bold geometric patterns and are lighter than knotted rugs.",
+        context: "Kilims are practical textiles used as floor coverings, wall hangings, and saddle blankets. The flat weave makes them reversible and easier to transport.",
+        related: ["flatweave", "carpet", "tapestry", "hanbel"],
+        relatedStories: [
+          { slug: "the-language-of-wool", title: "The Language of Wool" },
+          { slug: "flat-weave-traditions", title: "Flat Weave Traditions" },
+        ],
+      },
+      {
+        id: "boucherouite",
+        term: "Boucherouite",
+        pronunciation: "boo-sheh-REET",
+        arabicScript: "بوشروط",
+        category: "textiles-weaving",
+        definition: "A rag rug made from recycled fabric scraps, traditionally created in regions where wool was scarce. The name derives from 'bu sherwit' (father of rags). Characterized by vibrant, abstract compositions.",
+        context: "Once considered poor women's craft, boucherouite rugs gained international recognition as folk art in the late 20th century. Each rug tells the story of its materials—old clothes, fabric samples, industrial scraps.",
+        related: ["rag rug", "recycled textile", "upcycled art", "folk art"],
+        relatedStories: [
+          { slug: "rags-to-art", title: "Rags to Art" },
+          { slug: "the-scrap-weavers", title: "The Scrap Weavers" },
+        ],
+      },
+      {
+        id: "beni-ourain",
+        term: "Beni Ourain",
+        pronunciation: "BEN-ee wah-RAIN",
+        arabicScript: "بني وران",
+        tifinagh: "ⴱⵏⵉ ⵡⵔⴰⵢⵏ",
+        category: "textiles-weaving",
+        definition: "A style of thick, plush wool rug from the Beni Ourain tribe of the Middle Atlas mountains. Characterized by cream-white wool with dark geometric patterns—typically diamonds and lines.",
+        context: "These rugs gained Western popularity after Le Corbusier featured them in his designs. Authentic Beni Ourain rugs use undyed wool from mountain sheep and can take months to complete.",
+        related: ["Middle Atlas", "Amazigh rug", "tribal carpet", "natural wool"],
+        relatedJourneys: [
+          { slug: "7-Day-Atlas-Valleys", title: "Atlas Valleys Journey" },
+        ],
+        relatedStories: [
+          { slug: "white-wool-black-diamonds", title: "White Wool, Black Diamonds" },
+          { slug: "weavers-of-the-atlas", title: "Weavers of the Atlas" },
+        ],
+        relatedPlaces: [
+          { slug: "azrou", title: "Azrou" },
+          { slug: "ifrane", title: "Ifrane" },
+        ],
+      },
+      {
+        id: "hanbel",
+        term: "Hanbel",
+        pronunciation: "HAN-bel",
+        arabicScript: "حنبل",
+        category: "textiles-weaving",
+        definition: "A traditional Moroccan flatweave blanket or rug, typically featuring horizontal stripes in bold colors. Used as bedding, floor covering, and ceremonial textile.",
+        context: "Hanbels are among the most practical Moroccan textiles, lightweight and multipurpose. Regional variations include the striped hanbels of the Middle Atlas and the geometric patterns of the South.",
+        related: ["blanket", "flatweave", "striped textile", "bedding"],
+        relatedStories: [
+          { slug: "stripes-of-the-atlas", title: "Stripes of the Atlas" },
+        ],
+      },
+      {
+        id: "azilal",
+        term: "Azilal",
+        pronunciation: "ah-zee-LAL",
+        arabicScript: "أزيلال",
+        category: "textiles-weaving",
+        definition: "A style of Berber rug from the Azilal province in the central High Atlas. Known for expressive, asymmetrical designs combining knotted pile with flatweave sections and often incorporating symbolic motifs.",
+        context: "Azilal rugs are distinguished by their creative freedom—weavers often improvise patterns, creating unique compositions that reflect personal expression alongside traditional symbols.",
+        related: ["High Atlas", "Berber rug", "mixed technique", "tribal art"],
+        relatedJourneys: [
+          { slug: "5-Day-Toubkal-Trek", title: "Toubkal Trek" },
+        ],
+        relatedStories: [
+          { slug: "free-hand-weavers", title: "Free Hand Weavers" },
+        ],
+        relatedPlaces: [
+          { slug: "azilal", title: "Azilal" },
+        ],
+      },
+      {
+        id: "sabra",
+        term: "Sabra",
+        pronunciation: "SAB-ra",
+        arabicScript: "صبرا",
+        category: "textiles-weaving",
+        definition: "A silk-like fabric made from cactus fiber (agave) or rayon, used for decorative textiles including cushion covers and throws. Known for its shimmering appearance and vibrant colors.",
+        context: "Modern 'sabra silk' is often synthetic, though traditional production used fibers from the aloe cactus. The material is popular in contemporary Moroccan interior design.",
+        related: ["cactus silk", "agave fiber", "decorative textile", "cushion cover"],
+        relatedStories: [
+          { slug: "silk-of-the-desert", title: "Silk of the Desert" },
+        ],
+      },
+      {
+        id: "loom",
+        term: "Loom (Azetta)",
+        pronunciation: "ah-ZET-ta",
+        tifinagh: "ⴰⵣⴻⵜⵜⴰ",
+        category: "textiles-weaving",
+        definition: "The frame on which textiles are woven. Traditional Amazigh looms are vertical structures, often set up against house walls. The word 'azetta' in Tamazight also means 'writing' or 'language.'",
+        context: "The loom holds spiritual significance—weaving is considered a form of communication with ancestors. Setting up a new loom involves ritual blessing.",
+        related: ["weaving frame", "vertical loom", "traditional craft"],
+        relatedStories: [
+          { slug: "the-first-language", title: "The First Language" },
+          { slug: "sacred-geometry", title: "Sacred Geometry" },
+        ],
       },
     ],
   },

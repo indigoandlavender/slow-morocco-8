@@ -31,7 +31,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   // Fetch data on mount
   useEffect(() => {
     Promise.all([
-      fetch("/api/journeys?includeHidden=true").then((r) => r.json()),
+      fetch("/api/journeys").then((r) => r.json()),
       fetch("/api/stories").then((r) => r.json()),
       fetch("/api/places").then((r) => r.json()),
     ]).then(([journeysData, storiesData, placesData]) => {
