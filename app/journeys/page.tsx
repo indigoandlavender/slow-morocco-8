@@ -532,11 +532,8 @@ export default function JourneysPage() {
           <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl mb-6">
             Looking for something different?
           </h2>
-          <p className="text-white/70 leading-relaxed mb-4 text-lg">
-            These are starting points, not scripts. Tell us what matters to you—we'll shape a route around it.
-          </p>
-          <p className="text-white/50 leading-relaxed mb-12 text-lg">
-            Add a day in the desert. Skip the city. Stay longer where something pulls you.
+          <p className="text-white/70 leading-relaxed mb-12 text-lg">
+            These are starting points, not scripts. Tell us what matters to you—we'll shape a route around it. Add a day in the desert. Skip the city. Stay longer where something pulls you.
           </p>
           <Link
             href="/plan-your-trip"
