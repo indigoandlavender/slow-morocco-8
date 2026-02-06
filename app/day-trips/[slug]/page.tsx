@@ -7,6 +7,7 @@ import Image from "next/image";
 import { ArrowLeft, Clock, MapPin, Mountain } from "lucide-react";
 import DayTripBookingModal from "@/components/DayTripBookingModal";
 import AgafayRouteMap from "@/components/AgafayRouteMap";
+import { linkGlossaryTermsText } from "@/lib/glossary-linker";
 
 interface DayTrip {
   slug: string;
@@ -151,7 +152,7 @@ export default function DayTripDetailPage() {
 
           {/* Short Description */}
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-12 font-display italic">
-            {dayTrip.shortDescription}
+            {linkGlossaryTermsText(dayTrip.shortDescription)}
           </p>
 
           {/* Narrative */}
@@ -161,7 +162,7 @@ export default function DayTripDetailPage() {
                 key={index}
                 className="text-muted-foreground leading-relaxed mb-6"
               >
-                {paragraph}
+                {linkGlossaryTermsText(paragraph)}
               </p>
             ))}
           </div>
