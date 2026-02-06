@@ -226,3 +226,135 @@ export function transformRouteForAPI(route: Route) {
     meals: route.meals,
   };
 }
+
+// =============================================
+// DAY TRIPS
+// =============================================
+
+export interface DayTrip {
+  slug: string;
+  route_id: string | null;
+  title: string;
+  short_description: string | null;
+  duration_hours: number | null;
+  driver_cost_mad: number | null;
+  margin_percent: number | null;
+  paypal_percent: number | null;
+  final_price_mad: number | null;
+  final_price_eur: number | null;
+  departure_city: string | null;
+  category: string | null;
+  hero_image_url: string | null;
+  includes: string | null;
+  excludes: string | null;
+  meeting_point: string | null;
+  published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DayTripAddon {
+  addon_id: string;
+  addon_name: string;
+  description: string | null;
+  cost_mad_pp: number | null;
+  margin_percent: number | null;
+  paypal_percent: number | null;
+  final_price_mad_pp: number | null;
+  final_price_eur_pp: number | null;
+  applies_to: string | null;
+  published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DayTripBooking {
+  booking_id: string;
+  created_at: string;
+  trip_slug: string;
+  trip_title: string | null;
+  trip_date: string | null;
+  guests: number | null;
+  base_price_mad: number | null;
+  addons: string | null;
+  addons_price_mad: number | null;
+  total_mad: number | null;
+  total_eur: number | null;
+  guest_name: string | null;
+  guest_email: string | null;
+  guest_phone: string | null;
+  pickup_location: string | null;
+  notes: string | null;
+  paypal_transaction_id: string | null;
+  status: string;
+}
+
+export async function getDayTrips(options?: { published?: boolean }) {
+  let query = supabase.from("day_trips").select("*");
+
+  if (options?.published !== undefined) {
+    query = query.eq("published", options.published);
+  }
+
+  const { data, error } = await query.order("duration_hours", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching day trips:", error);
+    return [];
+  }
+
+  return data as DayTrip[];
+}
+
+export async function getDayTripBySlug(slug: string) {
+  const { data, error } = await supabase
+    .from("day_trips")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (error) {
+    console.error("Error fetching day trip:", error);
+    return null;
+  }
+
+  return data as DayTrip;
+}
+
+export async function getDayTripAddons(tripSlug?: string) {
+  let query = supabase
+    .from("day_trip_addons")
+    .select("*")
+    .eq("published", true);
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Error fetching day trip addons:", error);
+    return [];
+  }
+
+  // Filter by applies_to if tripSlug provided
+  if (tripSlug) {
+    return (data as DayTripAddon[]).filter((addon) =>
+      addon.applies_to?.split("|").includes(tripSlug)
+    );
+  }
+
+  return data as DayTripAddon[];
+}
+
+export async function createDayTripBooking(booking: Omit<DayTripBooking, "booking_id" | "created_at">) {
+  const { data, error } = await supabase
+    .from("day_trip_bookings")
+    .insert(booking)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error creating booking:", error);
+    return null;
+  }
+
+  return data as DayTripBooking;
+}
