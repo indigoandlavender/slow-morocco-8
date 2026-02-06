@@ -222,7 +222,7 @@ export default function JourneysPage() {
   };
 
   return (
-    <div className="bg-background min-h-screen">
+    <main className="bg-background min-h-screen" role="main" aria-label="Morocco Journeys Collection">
       {/* Immersive Hero Banner */}
       <PageBanner
         slug="journeys"
@@ -234,24 +234,28 @@ export default function JourneysPage() {
       />
 
       {/* Search & Filters */}
-      <section className="py-8 border-b border-border">
+      <section className="py-8 border-b border-border" aria-label="Filter journeys">
         <div className="container mx-auto px-6 lg:px-16">
+          {/* Hidden H1 for SEO - visible title is in PageBanner */}
+          <h1 className="sr-only">Morocco Journeys & Tours - Private Itineraries</h1>
+          
           {/* Search Bar */}
           <div className="mb-8">
             <div className="relative max-w-xl">
-              <Search className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/30" />
+              <Search className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/30" aria-hidden="true" />
               <input
-                type="text"
+                type="search"
                 placeholder="Search journeys, destinations, or experiences..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-8 pr-4 py-3 bg-transparent border-b border-foreground/20 focus:border-foreground/60 focus:outline-none text-base placeholder:text-foreground/30 transition-colors text-foreground"
+                aria-label="Search Morocco journeys"
               />
             </div>
           </div>
 
           {/* Filters Row */}
-          <div className="flex flex-col md:flex-row md:items-start gap-8 md:gap-16">
+          <nav className="flex flex-col md:flex-row md:items-start gap-8 md:gap-16" aria-label="Journey filters">
             {/* Duration Filter */}
             <div>
               <h2 className="text-xs tracking-[0.2em] uppercase text-foreground/40 mb-4">
@@ -307,15 +311,15 @@ export default function JourneysPage() {
                 </button>
               </div>
             )}
-          </div>
+          </nav>
         </div>
       </section>
 
       {/* Results count */}
       {!loading && (
-        <div className="container mx-auto px-6 lg:px-16 py-6">
+        <div className="container mx-auto px-6 lg:px-16 py-6" role="status" aria-live="polite">
           <p className="text-sm text-foreground/40">
-            {filteredResults.length} {filteredResults.length === 1 ? "result" : "results"}
+            {filteredResults.length} {filteredResults.length === 1 ? "journey" : "journeys"} found
             {totalPages > 1 && (
               <span className="ml-2">
                 · Page {currentPage} of {totalPages}
@@ -326,7 +330,7 @@ export default function JourneysPage() {
       )}
 
       {/* Results Grid */}
-      <section className="py-8 md:py-12">
+      <section className="py-8 md:py-12" aria-label="Journey listings">
         <div className="container mx-auto px-6 lg:px-16">
           {loading ? (
             <div className="flex justify-center py-20">
@@ -414,72 +418,79 @@ export default function JourneysPage() {
                   const typeBadge = getFocusBadge();
 
                   return (
-                    <Link
+                    <article 
                       key={`${item.type}-${item.slug}`}
-                      href={href}
                       className="group"
+                      itemScope 
+                      itemType="https://schema.org/TouristTrip"
                     >
-                      <div className="relative aspect-[4/5] mb-4 overflow-hidden bg-foreground/5">
-                        {item.heroImage && (
-                          <Image
-                            src={item.heroImage}
-                            alt={item.title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-700"
-                          />
-                        )}
-                        {typeBadge && (
-                          <div className="absolute top-4 left-4">
-                            <span className="text-[10px] tracking-[0.15em] uppercase bg-background/90 text-foreground/80 px-3 py-1.5 flex items-center gap-1.5">
-                              {item.type === 'daytrip' && <Clock className="w-3 h-3" />}
-                              {item.type === 'overnight' && <Moon className="w-3 h-3" />}
-                              {typeBadge}
+                      <Link href={href} className="block">
+                        <figure className="relative aspect-[4/5] mb-4 overflow-hidden bg-foreground/5">
+                          {item.heroImage && (
+                            <Image
+                              src={item.heroImage}
+                              alt={`${item.title} - Morocco ${item.type === 'daytrip' ? 'day trip' : 'journey'}`}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-700"
+                              itemProp="image"
+                            />
+                          )}
+                          {typeBadge && (
+                            <div className="absolute top-4 left-4">
+                              <span className="text-[10px] tracking-[0.15em] uppercase bg-background/90 text-foreground/80 px-3 py-1.5 flex items-center gap-1.5">
+                                {item.type === 'daytrip' && <Clock className="w-3 h-3" aria-hidden="true" />}
+                                {item.type === 'overnight' && <Moon className="w-3 h-3" aria-hidden="true" />}
+                                {typeBadge}
+                              </span>
+                            </div>
+                          )}
+                          {item.hidden && (
+                            <div className="absolute top-4 right-4">
+                              <span className="text-[10px] tracking-[0.15em] uppercase bg-foreground/80 text-background px-2 py-1">
+                                Unlisted
+                              </span>
+                            </div>
+                          )}
+                        </figure>
+                        <div className="flex items-baseline justify-between mb-1">
+                          <span className="text-xs tracking-[0.15em] uppercase text-foreground/40" itemProp="duration">
+                            {durationLabel}
+                          </span>
+                          {Number(item.price) > 0 && (
+                            <span className="text-xs text-foreground/40" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                              From <span className="text-foreground/70" itemProp="price">{format(Number(item.price))}</span>
+                              <meta itemProp="priceCurrency" content="EUR" />
                             </span>
-                          </div>
-                        )}
-                        {item.hidden && (
-                          <div className="absolute top-4 right-4">
-                            <span className="text-[10px] tracking-[0.15em] uppercase bg-foreground/80 text-background px-2 py-1">
-                              Unlisted
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex items-baseline justify-between mb-1">
-                        <p className="text-xs tracking-[0.15em] uppercase text-foreground/40">
-                          {durationLabel}
+                          )}
+                        </div>
+                        <h3 className="font-serif text-xl text-foreground mb-2 group-hover:text-foreground/70 transition-colors" itemProp="name">
+                          {item.title}
+                        </h3>
+                        <p className="text-sm text-foreground/50 leading-relaxed line-clamp-2" itemProp="description">
+                          {item.description}
                         </p>
-                        {Number(item.price) > 0 && (
-                          <p className="text-xs text-foreground/40">
-                            From <span className="text-foreground/70">{format(Number(item.price))}</span>
-                          </p>
-                        )}
-                      </div>
-                      <h3 className="font-serif text-xl text-foreground mb-2 group-hover:text-foreground/70 transition-colors">
-                        {item.title}
-                      </h3>
-                      <p className="text-sm text-foreground/50 leading-relaxed line-clamp-2">
-                        {item.description}
-                      </p>
-                    </Link>
+                        <meta itemProp="touristType" content={typeBadge || 'Cultural Tourism'} />
+                      </Link>
+                    </article>
                   );
                 })}
               </div>
 
               {/* Pagination Controls */}
               {totalPages > 1 && (
-                <div className="flex justify-center items-center gap-2 mt-16 pt-8 border-t border-foreground/10">
+                <nav className="flex justify-center items-center gap-2 mt-16 pt-8 border-t border-foreground/10" aria-label="Journey pages">
                   {/* Previous Button */}
                   <button
                     onClick={() => goToPage(currentPage - 1)}
                     disabled={currentPage === 1}
+                    aria-label="Go to previous page"
                     className={`flex items-center gap-1 px-4 py-2 text-xs tracking-[0.15em] uppercase transition-colors ${
                       currentPage === 1
                         ? "text-foreground/20 cursor-not-allowed"
                         : "text-foreground/60 hover:text-foreground"
                     }`}
                   >
-                    <ChevronLeft className="w-4 h-4" />
+                    <ChevronLeft className="w-4 h-4" aria-hidden="true" />
                     Prev
                   </button>
 
@@ -487,13 +498,15 @@ export default function JourneysPage() {
                   <div className="flex items-center gap-1">
                     {getPageNumbers().map((page, index) => (
                       page === '...' ? (
-                        <span key={`ellipsis-${index}`} className="px-3 py-2 text-foreground/30">
+                        <span key={`ellipsis-${index}`} className="px-3 py-2 text-foreground/30" aria-hidden="true">
                           ...
                         </span>
                       ) : (
                         <button
                           key={page}
                           onClick={() => goToPage(page as number)}
+                          aria-label={`Go to page ${page}`}
+                          aria-current={currentPage === page ? 'page' : undefined}
                           className={`min-w-[40px] px-3 py-2 text-xs tracking-[0.1em] transition-colors ${
                             currentPage === page
                               ? "bg-foreground text-background"
@@ -510,6 +523,7 @@ export default function JourneysPage() {
                   <button
                     onClick={() => goToPage(currentPage + 1)}
                     disabled={currentPage === totalPages}
+                    aria-label="Go to next page"
                     className={`flex items-center gap-1 px-4 py-2 text-xs tracking-[0.15em] uppercase transition-colors ${
                       currentPage === totalPages
                         ? "text-foreground/20 cursor-not-allowed"
@@ -517,9 +531,9 @@ export default function JourneysPage() {
                     }`}
                   >
                     Next
-                    <ChevronRight className="w-4 h-4" />
+                    <ChevronRight className="w-4 h-4" aria-hidden="true" />
                   </button>
-                </div>
+                </nav>
               )}
             </>
           )}
@@ -527,9 +541,9 @@ export default function JourneysPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 md:py-32 bg-[#1a1916] text-white">
+      <section className="py-24 md:py-32 bg-[#1a1916] text-white" aria-labelledby="cta-heading">
         <div className="container mx-auto px-6 lg:px-16 max-w-3xl text-center">
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl mb-6">
+          <h2 id="cta-heading" className="font-serif text-3xl md:text-4xl lg:text-5xl mb-6">
             Looking for something different?
           </h2>
           <p className="text-white/70 leading-relaxed mb-12 text-lg">
@@ -538,11 +552,12 @@ export default function JourneysPage() {
           <Link
             href="/plan-your-trip"
             className="inline-block bg-white text-[#1a1916] px-12 py-4 text-xs tracking-[0.15em] uppercase hover:bg-white/90 transition-colors"
+            aria-label="Start planning your custom Morocco journey"
           >
             Start the conversation
           </Link>
         </div>
       </section>
-    </div>
+    </main>
   );
 }
