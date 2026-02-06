@@ -140,10 +140,12 @@ export default function Header() {
               </button>
             </div>
           </div>
+        </div>
 
-          {/* Mobile Navigation */}
-          {mobileMenuOpen && (
-            <nav className="md:hidden py-8 space-y-1 border-t border-border bg-background">
+        {/* Mobile Navigation - outside container for full width */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-background border-t border-border shadow-lg">
+            <nav className="px-8 py-8 space-y-1">
               <Link
                 href="/journeys"
                 className="block text-sm tracking-[0.15em] uppercase py-4"
@@ -189,8 +191,8 @@ export default function Header() {
                 </Link>
               </div>
             </nav>
-          )}
-        </div>
+          </div>
+        )}
       </header>
 
       {/* Search Modal */}
