@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, Clock, Moon } from "lucide-react";
+import { Search, Clock, Moon, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCurrency } from "@/lib/currency";
 import PageBanner from "@/components/PageBanner";
 
@@ -23,14 +23,19 @@ interface SearchableItem {
   hidden?: boolean;
 }
 
+const ITEMS_PER_PAGE = 10;
+
 export default function JourneysPage() {
-  const [allJourneys, setAllJourneys] = useState<SearchableItem[]>([]); // All journeys including hidden
-  const [visibleJourneys, setVisibleJourneys] = useState<SearchableItem[]>([]); // Published journeys only
-  const [dayTrips, setDayTrips] = useState<SearchableItem[]>([]); // Day trips for search
-  const [overnightTrips, setOvernightTrips] = useState<SearchableItem[]>([]); // Overnight for search
+  const [allJourneys, setAllJourneys] = useState<SearchableItem[]>([]);
+  const [visibleJourneys, setVisibleJourneys] = useState<SearchableItem[]>([]);
+  const [dayTrips, setDayTrips] = useState<SearchableItem[]>([]);
+  const [overnightTrips, setOvernightTrips] = useState<SearchableItem[]>([]);
   const [filteredResults, setFilteredResults] = useState<SearchableItem[]>([]);
   const [loading, setLoading] = useState(true);
   const { format } = useCurrency();
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
   
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState("");
@@ -55,13 +60,11 @@ export default function JourneysPage() {
   ];
 
   useEffect(() => {
-    // Fetch ALL content types
     Promise.all([
-      fetch("/api/journeys").then(r => r.json()),
+      fetch("/api/journeys?includeHidden=true").then(r => r.json()),
       fetch("/api/day-trips").then(r => r.json()),
     ])
       .then(([journeysData, dayTripsData]) => {
-        // Process journeys
         const allJourneysRaw = journeysData.journeys || [];
         const regularJourneys = allJourneysRaw
           .filter((j: any) => j.journeyType !== 'epic')
@@ -82,7 +85,6 @@ export default function JourneysPage() {
         
         const publishedJourneys = regularJourneys.filter((j: SearchableItem) => !j.hidden);
         
-        // Process day trips
         const dayTripsFormatted = (dayTripsData.dayTrips || []).map((d: any): SearchableItem => ({
           type: 'daytrip',
           slug: d.slug,
@@ -95,7 +97,6 @@ export default function JourneysPage() {
           startCity: d.departureCity,
         }));
         
-        // Add Agafay overnight as a searchable item
         const overnightFormatted: SearchableItem[] = [{
           type: 'overnight',
           slug: 'agafay-desert',
@@ -123,23 +124,18 @@ export default function JourneysPage() {
 
   // Apply search and filters
   useEffect(() => {
-    // When searching, search through ALL content types (journeys, day trips, overnight)
-    // When not searching, only show visible/published journeys
     const isSearching = searchQuery.trim().length > 0;
     
     let sourceItems: SearchableItem[] = [];
     
     if (isSearching) {
-      // Include all journeys (including hidden), day trips, and overnight experiences
       sourceItems = [...allJourneys, ...dayTrips, ...overnightTrips];
     } else {
-      // Only show published journeys when not searching
       sourceItems = visibleJourneys;
     }
     
     let filtered = [...sourceItems];
 
-    // Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter((item) =>
@@ -151,10 +147,9 @@ export default function JourneysPage() {
       );
     }
 
-    // Duration filter (only applies to journeys, day trips always pass)
     if (selectedDuration !== "all") {
       filtered = filtered.filter((item) => {
-        if (item.type === 'daytrip') return selectedDuration === 'short'; // Day trips count as short
+        if (item.type === 'daytrip') return selectedDuration === 'short';
         const days = item.durationDays || 0;
         if (selectedDuration === "short") return days >= 1 && days <= 5;
         if (selectedDuration === "medium") return days >= 6 && days <= 10;
@@ -163,7 +158,6 @@ export default function JourneysPage() {
       });
     }
 
-    // Focus filter
     if (selectedFocus !== "all") {
       filtered = filtered.filter((item) =>
         item.focus?.toLowerCase().includes(selectedFocus.toLowerCase()) ||
@@ -172,15 +166,47 @@ export default function JourneysPage() {
     }
 
     setFilteredResults(filtered);
+    setCurrentPage(1); // Reset to first page when filters change
   }, [allJourneys, visibleJourneys, dayTrips, overnightTrips, searchQuery, selectedDuration, selectedFocus]);
 
   const clearFilters = () => {
     setSearchQuery("");
     setSelectedDuration("all");
     setSelectedFocus("all");
+    setCurrentPage(1);
   };
 
   const hasActiveFilters = searchQuery || selectedDuration !== "all" || selectedFocus !== "all";
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredResults.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentItems = filteredResults.slice(startIndex, endIndex);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 400, behavior: 'smooth' });
+  };
+
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = [];
+    
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      if (currentPage <= 3) {
+        pages.push(1, 2, 3, 4, '...', totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+      }
+    }
+    
+    return pages;
+  };
 
   return (
     <div className="bg-background min-h-screen">
@@ -198,12 +224,12 @@ export default function JourneysPage() {
       <section className="py-8 border-b border-border">
         <div className="container mx-auto px-6 lg:px-16">
           {/* Search Bar */}
-          <div className="max-w-xl mb-10">
-            <div className="relative">
-              <Search className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40" />
+          <div className="mb-8">
+            <div className="relative max-w-xl">
+              <Search className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/30" />
               <input
                 type="text"
-                placeholder="Search journeys, destinations, experiences..."
+                placeholder="Search journeys, destinations, or experiences..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-8 pr-4 py-3 bg-transparent border-b border-foreground/20 focus:border-foreground/60 focus:outline-none text-base placeholder:text-foreground/30 transition-colors text-foreground"
@@ -277,6 +303,11 @@ export default function JourneysPage() {
         <div className="container mx-auto px-6 lg:px-16 py-6">
           <p className="text-sm text-foreground/40">
             {filteredResults.length} {filteredResults.length === 1 ? "result" : "results"}
+            {totalPages > 1 && (
+              <span className="ml-2">
+                · Page {currentPage} of {totalPages}
+              </span>
+            )}
           </p>
         </div>
       )}
@@ -299,83 +330,136 @@ export default function JourneysPage() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
-              {filteredResults.map((item) => {
-                // Determine link based on type
-                const href = item.type === 'daytrip' 
-                  ? `/day-trips/${item.slug}`
-                  : item.type === 'overnight'
-                  ? `/overnight/${item.slug}`
-                  : `/journeys/${item.slug}`;
-                
-                // Determine duration label
-                const durationLabel = item.type === 'daytrip'
-                  ? `${item.durationHours} Hours`
-                  : item.type === 'overnight'
-                  ? '2 Days'
-                  : `${item.durationDays} Days`;
-                
-                // Type badge
-                const typeBadge = item.type === 'daytrip' 
-                  ? 'Day Trip'
-                  : item.type === 'overnight'
-                  ? 'Overnight'
-                  : item.category;
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+                {currentItems.map((item) => {
+                  const href = item.type === 'daytrip' 
+                    ? `/day-trips/${item.slug}`
+                    : item.type === 'overnight'
+                    ? `/overnight/${item.slug}`
+                    : `/journeys/${item.slug}`;
+                  
+                  const durationLabel = item.type === 'daytrip'
+                    ? `${item.durationHours} Hours`
+                    : item.type === 'overnight'
+                    ? '2 Days'
+                    : `${item.durationDays} Days`;
+                  
+                  const typeBadge = item.type === 'daytrip' 
+                    ? 'Day Trip'
+                    : item.type === 'overnight'
+                    ? 'Overnight'
+                    : item.category;
 
-                return (
-                  <Link
-                    key={`${item.type}-${item.slug}`}
-                    href={href}
-                    className="group"
-                  >
-                    <div className="relative aspect-[4/5] mb-4 overflow-hidden bg-foreground/5">
-                      {item.heroImage && (
-                        <Image
-                          src={item.heroImage}
-                          alt={item.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-700"
-                        />
-                      )}
-                      {/* Type/Category Badge */}
-                      {typeBadge && (
-                        <div className="absolute top-4 left-4">
-                          <span className="text-[10px] tracking-[0.15em] uppercase bg-background/90 text-foreground/80 px-3 py-1.5 flex items-center gap-1.5">
-                            {item.type === 'daytrip' && <Clock className="w-3 h-3" />}
-                            {item.type === 'overnight' && <Moon className="w-3 h-3" />}
-                            {typeBadge}
-                          </span>
-                        </div>
-                      )}
-                      {/* Hidden Badge - only show when item is hidden */}
-                      {item.hidden && (
-                        <div className="absolute top-4 right-4">
-                          <span className="text-[10px] tracking-[0.15em] uppercase bg-foreground/80 text-background px-2 py-1">
-                            Unlisted
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex items-baseline justify-between mb-1">
-                      <p className="text-xs tracking-[0.15em] uppercase text-foreground/40">
-                        {durationLabel}
-                      </p>
-                      {Number(item.price) > 0 && (
-                        <p className="text-xs text-foreground/40">
-                          From <span className="text-foreground/70">{format(Number(item.price))}</span>
+                  return (
+                    <Link
+                      key={`${item.type}-${item.slug}`}
+                      href={href}
+                      className="group"
+                    >
+                      <div className="relative aspect-[4/5] mb-4 overflow-hidden bg-foreground/5">
+                        {item.heroImage && (
+                          <Image
+                            src={item.heroImage}
+                            alt={item.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-700"
+                          />
+                        )}
+                        {typeBadge && (
+                          <div className="absolute top-4 left-4">
+                            <span className="text-[10px] tracking-[0.15em] uppercase bg-background/90 text-foreground/80 px-3 py-1.5 flex items-center gap-1.5">
+                              {item.type === 'daytrip' && <Clock className="w-3 h-3" />}
+                              {item.type === 'overnight' && <Moon className="w-3 h-3" />}
+                              {typeBadge}
+                            </span>
+                          </div>
+                        )}
+                        {item.hidden && (
+                          <div className="absolute top-4 right-4">
+                            <span className="text-[10px] tracking-[0.15em] uppercase bg-foreground/80 text-background px-2 py-1">
+                              Unlisted
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-baseline justify-between mb-1">
+                        <p className="text-xs tracking-[0.15em] uppercase text-foreground/40">
+                          {durationLabel}
                         </p>
-                      )}
-                    </div>
-                    <h3 className="font-serif text-xl text-foreground mb-2 group-hover:text-foreground/70 transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm text-foreground/50 leading-relaxed line-clamp-2">
-                      {item.description}
-                    </p>
-                  </Link>
-                );
-              })}
-            </div>
+                        {Number(item.price) > 0 && (
+                          <p className="text-xs text-foreground/40">
+                            From <span className="text-foreground/70">{format(Number(item.price))}</span>
+                          </p>
+                        )}
+                      </div>
+                      <h3 className="font-serif text-xl text-foreground mb-2 group-hover:text-foreground/70 transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm text-foreground/50 leading-relaxed line-clamp-2">
+                        {item.description}
+                      </p>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-2 mt-16 pt-8 border-t border-foreground/10">
+                  {/* Previous Button */}
+                  <button
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`flex items-center gap-1 px-4 py-2 text-xs tracking-[0.15em] uppercase transition-colors ${
+                      currentPage === 1
+                        ? "text-foreground/20 cursor-not-allowed"
+                        : "text-foreground/60 hover:text-foreground"
+                    }`}
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Prev
+                  </button>
+
+                  {/* Page Numbers */}
+                  <div className="flex items-center gap-1">
+                    {getPageNumbers().map((page, index) => (
+                      page === '...' ? (
+                        <span key={`ellipsis-${index}`} className="px-3 py-2 text-foreground/30">
+                          ...
+                        </span>
+                      ) : (
+                        <button
+                          key={page}
+                          onClick={() => goToPage(page as number)}
+                          className={`min-w-[40px] px-3 py-2 text-xs tracking-[0.1em] transition-colors ${
+                            currentPage === page
+                              ? "bg-foreground text-background"
+                              : "text-foreground/60 hover:text-foreground hover:bg-foreground/5"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      )
+                    ))}
+                  </div>
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`flex items-center gap-1 px-4 py-2 text-xs tracking-[0.15em] uppercase transition-colors ${
+                      currentPage === totalPages
+                        ? "text-foreground/20 cursor-not-allowed"
+                        : "text-foreground/60 hover:text-foreground"
+                    }`}
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
