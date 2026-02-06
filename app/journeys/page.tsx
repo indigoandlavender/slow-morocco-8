@@ -358,11 +358,60 @@ export default function JourneysPage() {
                     ? '2 Days'
                     : `${item.durationDays} Days`;
                   
-                  const typeBadge = item.type === 'daytrip' 
-                    ? 'Day Trip'
-                    : item.type === 'overnight'
-                    ? 'Overnight'
-                    : item.category;
+                  // Show meaningful badge: focus type for journeys, type for day trips/overnight
+                  // Hide vague categories like "Interest", "Route", "Classic"
+                  const vagueLabels = ['interest', 'route', 'classic', 'traveler type', 'grand tour'];
+                  const getFocusBadge = () => {
+                    if (item.type === 'daytrip') return 'Day Trip';
+                    if (item.type === 'overnight') return 'Overnight';
+                    
+                    // Prefer focus over category, format nicely
+                    const focus = item.focus?.toLowerCase() || '';
+                    const category = item.category?.toLowerCase() || '';
+                    
+                    // Map focus types to display labels
+                    const focusLabels: Record<string, string> = {
+                      'desert': 'Desert',
+                      'sahara': 'Desert',
+                      'trekking': 'Trekking',
+                      'hiking': 'Hiking',
+                      'culture': 'Culture',
+                      'coastal': 'Coastal',
+                      'coast': 'Coastal',
+                      'sea': 'Coastal',
+                      'surf': 'Surf',
+                      'food': 'Culinary',
+                      'culinary': 'Culinary',
+                      'craft': 'Craft',
+                      'architecture': 'Architecture',
+                      'heritage': 'Heritage',
+                      'adventure': 'Adventure',
+                      'nature': 'Nature',
+                      'mountains': 'Mountains',
+                      'wellness': 'Wellness',
+                      'photography': 'Photography',
+                      'wildlife': 'Wildlife',
+                      'romance': 'Romance',
+                      'family': 'Family',
+                      'luxury': 'Luxury',
+                      'literature': 'Literature',
+                      'art': 'Art',
+                    };
+                    
+                    // Check focus first
+                    for (const [key, label] of Object.entries(focusLabels)) {
+                      if (focus.includes(key)) return label;
+                    }
+                    
+                    // Check category if focus didn't match
+                    if (category && !vagueLabels.includes(category)) {
+                      return item.category;
+                    }
+                    
+                    return null; // Hide badge if nothing meaningful
+                  };
+                  
+                  const typeBadge = getFocusBadge();
 
                   return (
                     <Link
