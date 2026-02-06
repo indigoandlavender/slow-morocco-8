@@ -1,6 +1,5 @@
 import { Metadata } from "next";
-import { getJourneys as getJourneysFromSupabase } from "@/lib/supabase";
-import { getSheetData, convertDriveUrl } from "@/lib/sheets";
+import { getJourneys as getJourneysFromSupabase, getDayTrips as getDayTripsFromSupabase } from "@/lib/supabase";
 import JourneysContent from "./JourneysContent";
 
 export const metadata: Metadata = {
@@ -71,21 +70,19 @@ async function getJourneys(): Promise<{
         hidden: !j.show_on_journeys_page,
       }));
 
-    // Fetch day trips (still from Google Sheets until migrated)
-    const dayTripsData = await getSheetData("Day_Trips");
-    const dayTrips: Journey[] = dayTripsData
-      .filter((d: any) => d.published === "TRUE")
-      .map((d: any) => ({
-        type: "daytrip" as const,
-        slug: d.slug,
-        title: d.title,
-        description: d.shortDescription || d.narrative || "",
-        heroImage: convertDriveUrl(d.heroImage || d.routeImage || ""),
-        price: parseInt(d.priceEUR) || 0,
-        durationHours: parseInt(d.durationHours) || 0,
-        category: d.category,
-        startCity: d.departureCity,
-      }));
+    // Fetch day trips from Supabase
+    const dayTripsData = await getDayTripsFromSupabase({ published: true });
+    const dayTrips: Journey[] = dayTripsData.map((d) => ({
+      type: "daytrip" as const,
+      slug: d.slug,
+      title: d.title,
+      description: d.short_description || "",
+      heroImage: d.hero_image_url || "",
+      price: d.final_price_eur || 0,
+      durationHours: d.duration_hours || 0,
+      category: d.category || undefined,
+      startCity: d.departure_city || undefined,
+    }));
 
     // Overnight trips (hardcoded for now)
     const overnightTrips: Journey[] = [
