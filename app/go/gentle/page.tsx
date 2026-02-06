@@ -182,12 +182,15 @@ export default function GentleLandingPage() {
   };
 
   return (
-    <div className="bg-[#FAF7F2] text-[#1a1a1a] min-h-screen">
+    <main className="bg-[#FAF7F2] text-[#1a1a1a] min-h-screen" role="main" aria-label="Accessible Morocco Tours">
+      {/* Hidden H1 for SEO */}
+      <h1 className="sr-only">Accessible Morocco Tours - Gentle Journeys for Mobility Challenges</h1>
+      
       {/* Minimal Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#FAF7F2]/95 backdrop-blur-sm border-b border-[#1a1a1a]/5">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="font-serif text-sm tracking-[0.12em] text-[#1a1a1a] hover:opacity-60 transition-opacity">
+            <Link href="/" className="font-serif text-sm tracking-[0.12em] text-[#1a1a1a] hover:opacity-60 transition-opacity" aria-label="Slow Morocco Home">
               S L O W &nbsp; M O R O C C O
             </Link>
             <a
@@ -195,6 +198,7 @@ export default function GentleLandingPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs tracking-[0.15em] uppercase bg-[#1a1a1a] text-white px-6 py-2.5 hover:bg-[#333] transition-colors"
+              aria-label="Contact us on WhatsApp about accessible Morocco tours"
             >
               Let's Talk
             </a>
@@ -298,13 +302,13 @@ export default function GentleLandingPage() {
       </section>
 
       {/* Experiences */}
-      <section id="experiences" className="py-24">
+      <section id="experiences" className="py-24" aria-labelledby="experiences-heading">
         <div className="container mx-auto px-6">
           <div className="max-w-2xl mb-16">
             <p className="text-xs tracking-[0.3em] uppercase text-[#1a1a1a]/40 mb-4">
               Four Journeys
             </p>
-            <h2 className="text-3xl md:text-4xl font-serif mb-6">
+            <h2 id="experiences-heading" className="text-3xl md:text-4xl font-serif mb-6">
               Morocco, the way it should feel
             </h2>
             <p className="text-[#1a1a1a]/60 leading-relaxed">
@@ -314,21 +318,28 @@ export default function GentleLandingPage() {
 
           <div className="grid md:grid-cols-2 gap-8">
             {experiences.map((exp) => (
-              <div key={exp.id} className="group">
-                <div className="relative aspect-[16/10] mb-6 overflow-hidden">
+              <article 
+                key={exp.id} 
+                className="group"
+                itemScope
+                itemType="https://schema.org/TouristTrip"
+              >
+                <figure className="relative aspect-[16/10] mb-6 overflow-hidden">
                   <Image
                     src={exp.heroImage}
-                    alt={exp.title}
+                    alt={`${exp.title} - Accessible Morocco tour`}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    itemProp="image"
                   />
-                </div>
-                <p className="text-xs tracking-[0.2em] uppercase text-[#1a1a1a]/40 mb-2">
+                </figure>
+                <p className="text-xs tracking-[0.2em] uppercase text-[#1a1a1a]/40 mb-2" itemProp="duration">
                   {exp.duration} Days
                 </p>
-                <h3 className="font-serif text-2xl mb-3">{exp.title}</h3>
-                <p className="text-[#1a1a1a]/60 leading-relaxed">{exp.tagline || exp.description}</p>
-              </div>
+                <h3 className="font-serif text-2xl mb-3" itemProp="name">{exp.title}</h3>
+                <p className="text-[#1a1a1a]/60 leading-relaxed" itemProp="description">{exp.tagline || exp.description}</p>
+                <meta itemProp="touristType" content="Travellers with mobility challenges" />
+              </article>
             ))}
           </div>
 
@@ -347,6 +358,7 @@ export default function GentleLandingPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center bg-white text-[#1a1a1a] px-10 py-4 text-xs tracking-[0.15em] uppercase hover:bg-white/90 transition-colors"
+              aria-label="Start a WhatsApp conversation about customizing your accessible Morocco tour"
             >
               Begin the Conversation
             </a>
@@ -571,10 +583,10 @@ export default function GentleLandingPage() {
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:bg-[#20bd5a] transition-colors md:hidden"
-        aria-label="Chat on WhatsApp"
+        aria-label="Chat on WhatsApp about accessible Morocco tours"
       >
-        <MessageCircle className="w-6 h-6 text-white" />
+        <MessageCircle className="w-6 h-6 text-white" aria-hidden="true" />
       </a>
-    </div>
+    </main>
   );
 }
