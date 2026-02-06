@@ -1,26 +1,23 @@
 import { NextResponse } from "next/server";
-import { getSheetData } from "@/lib/sheets";
+import { getPlaces } from "@/lib/supabase";
 
 export const revalidate = 60;
 
 export async function GET() {
   try {
-    const placesData = await getSheetData("places");
+    const placesData = await getPlaces({ published: true });
     
-    // Filter published and featured places, sort by order
-    const places = placesData
-      .filter((p: any) => p.published === true || p.published === "TRUE")
-      .map((p: any) => ({
-        slug: p.slug || "",
-        title: p.title || "",
-        destination: p.destination || "",
-        category: p.category || "",
-        heroImage: p.heroImage || "",
-        excerpt: p.excerpt || "",
-        featured: p.featured === true || p.featured === "TRUE",
-        order: parseInt(p.order) || 999,
-      }))
-      .sort((a: any, b: any) => a.order - b.order);
+    // Map to API format
+    const places = placesData.map((p) => ({
+      slug: p.slug || "",
+      title: p.title || "",
+      destination: p.destination || "",
+      category: p.category || "",
+      heroImage: p.hero_image || "",
+      excerpt: p.excerpt || "",
+      featured: p.featured || false,
+      order: p.sort_order || 999,
+    }));
 
     return NextResponse.json({ 
       success: true,

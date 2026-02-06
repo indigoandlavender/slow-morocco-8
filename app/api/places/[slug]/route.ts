@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSheetData } from "@/lib/sheets";
+import { getPlaceBySlug, getPlaceImages } from "@/lib/supabase";
 
 export const revalidate = 60;
 
@@ -9,9 +9,7 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-    const placesData = await getSheetData("places");
-    
-    const place = placesData.find((p: any) => p.slug === slug);
+    const place = await getPlaceBySlug(slug);
     
     if (!place) {
       return NextResponse.json(
@@ -19,6 +17,9 @@ export async function GET(
         { status: 404 }
       );
     }
+
+    // Get gallery images
+    const images = await getPlaceImages(slug);
 
     return NextResponse.json({
       success: true,
@@ -31,13 +32,18 @@ export async function GET(
         openingHours: place.opening_hours || "",
         fees: place.fees || "",
         notes: place.notes || "",
-        heroImage: place.heroImage || "",
-        heroCaption: place.heroCaption || "",
+        heroImage: place.hero_image || "",
+        heroCaption: place.hero_caption || "",
         excerpt: place.excerpt || "",
         body: place.body || "",
         sources: place.sources || "",
         tags: place.tags || "",
       },
+      images: images.map((img) => ({
+        url: img.image_url || "",
+        caption: img.caption || "",
+        order: img.image_order,
+      })),
     });
   } catch (error: any) {
     console.error("GET /api/places/[slug] error:", error);
