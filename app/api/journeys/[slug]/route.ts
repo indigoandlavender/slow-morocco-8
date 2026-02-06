@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSheetData, convertDriveUrl } from "@/lib/sheets";
+import { getJourneyBySlug, getRoutesByIds } from "@/lib/supabase";
 
 // CORS headers for cross-origin requests (e.g., from Riad di Siena)
 const corsHeaders = {
@@ -19,13 +19,9 @@ export async function GET(
   try {
     const slug = params.slug;
     
-    // Get all journeys
-    const journeys = await getSheetData("Website_Journeys");
-    
-    // Find the specific journey by slug
-    const journeyData = journeys.find(
-      (j: any) => j.Slug === slug || j.Slug === decodeURIComponent(slug)
-    );
+    // Get journey by slug
+    const journeyData = await getJourneyBySlug(slug) || 
+                        await getJourneyBySlug(decodeURIComponent(slug));
 
     if (!journeyData) {
       return NextResponse.json(
@@ -36,36 +32,36 @@ export async function GET(
 
     // Format journey data
     const journey = {
-      slug: journeyData.Slug || "",
-      title: journeyData.Title || "",
-      duration: journeyData.Duration_Days ? `${journeyData.Duration_Days}-Day` : "",
-      durationDays: parseInt(journeyData.Duration_Days) || 0,
-      description: journeyData.Short_Description || "",
-      arcDescription: journeyData.Arc_Description || "",
-      heroImage: convertDriveUrl(journeyData.Hero_Image_URL || ""),
-      price: parseInt(journeyData.Price_EUR) || 0,
-      startCity: journeyData.Start_City || "",
-      focus: journeyData.Focus_Type || "",
-      destinations: journeyData.Destinations || "",
-      journeyId: journeyData.Journey_ID || "",
-      journeyType: journeyData.Journey_Type || "regular",
-      epicPrice: journeyData.Epic_Price_EUR ? parseInt(journeyData.Epic_Price_EUR) : null,
+      slug: journeyData.slug || "",
+      title: journeyData.title || "",
+      duration: journeyData.duration_days ? `${journeyData.duration_days}-Day` : "",
+      durationDays: journeyData.duration_days || 0,
+      description: journeyData.short_description || "",
+      arcDescription: journeyData.arc_description || "",
+      heroImage: journeyData.hero_image_url || "",
+      price: journeyData.price_eur || 0,
+      startCity: journeyData.start_city || "",
+      focus: journeyData.focus_type || "",
+      destinations: journeyData.destinations || "",
+      journeyId: journeyData.id || "",
+      journeyType: journeyData.journey_type || "regular",
+      epicPrice: journeyData.epic_price_eur || null,
     };
 
     // Get Route_Sequence and parse into array of Route_IDs
-    const routeSequence = journeyData.Route_Sequence || "";
+    const routeSequence = journeyData.route_sequence || "";
     const routeIds = routeSequence
       .split(",")
       .map((id: string) => id.trim())
       .filter((id: string) => id.length > 0);
 
-    // Get Content_Library for route data
-    const contentLibrary = await getSheetData("Content_Library");
+    // Get routes from Supabase
+    const routes = await getRoutesByIds(routeIds);
     
     // Build itinerary from Route_Sequence
     const itinerary = routeIds.map((routeId: string, index: number) => {
-      // Find the route in Content_Library by Route_ID
-      const route = contentLibrary.find((r: any) => r.Route_ID === routeId);
+      // Find the route by ID
+      const route = routes.find((r) => r.id === routeId);
       
       if (!route) {
         return {
@@ -83,20 +79,18 @@ export async function GET(
         };
       }
 
-      const rawImageUrl = route.Image_URL_1 || "";
-      
       return {
         dayNumber: index + 1,
-        cityName: route.To_City || "",
-        fromCity: route.From_City || "",
-        toCity: route.To_City || "",
-        description: route.Route_Narrative || "",
-        imageUrl: convertDriveUrl(rawImageUrl),
-        travelTime: route.Travel_Time_Hours || "",
-        difficulty: route.Difficulty_Level || "",
-        activities: route.Activities || "",
-        meals: route.Meals || "",
-        routeType: route.Route_Type || "",
+        cityName: route.to_city || "",
+        fromCity: route.from_city || "",
+        toCity: route.to_city || "",
+        description: route.route_narrative || "",
+        imageUrl: route.image_url || "",
+        travelTime: route.travel_time_hours || "",
+        difficulty: route.difficulty_level || "",
+        activities: route.activities || "",
+        meals: route.meals || "",
+        routeType: route.route_type || "",
       };
     });
 
