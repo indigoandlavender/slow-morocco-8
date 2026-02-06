@@ -298,6 +298,61 @@ export default function GlossaryPage() {
                               ))}
                             </p>
                           )}
+                          
+                          {/* Cross-links to content */}
+                          {(item.relatedJourneys || item.relatedStories || item.relatedPlaces) && (
+                            <div className="mt-4 pt-4 border-t border-border/50">
+                              {item.relatedJourneys && item.relatedJourneys.length > 0 && (
+                                <p className="text-xs text-foreground/50 mb-2">
+                                  <span className="uppercase tracking-wider text-foreground/40">Journeys:</span>{" "}
+                                  {item.relatedJourneys.map((j, i) => (
+                                    <span key={j.slug}>
+                                      <Link 
+                                        href={`/journeys/${j.slug}`}
+                                        className="underline hover:text-foreground/70"
+                                      >
+                                        {j.title}
+                                      </Link>
+                                      {i < item.relatedJourneys!.length - 1 && ", "}
+                                    </span>
+                                  ))}
+                                </p>
+                              )}
+                              {item.relatedStories && item.relatedStories.length > 0 && (
+                                <p className="text-xs text-foreground/50 mb-2">
+                                  <span className="uppercase tracking-wider text-foreground/40">Stories:</span>{" "}
+                                  {item.relatedStories.map((s, i) => (
+                                    <span key={s.slug}>
+                                      <Link 
+                                        href={`/story/${s.slug}`}
+                                        className="underline hover:text-foreground/70"
+                                      >
+                                        {s.title}
+                                      </Link>
+                                      {i < item.relatedStories!.length - 1 && ", "}
+                                    </span>
+                                  ))}
+                                </p>
+                              )}
+                              {item.relatedPlaces && item.relatedPlaces.length > 0 && (
+                                <p className="text-xs text-foreground/50">
+                                  <span className="uppercase tracking-wider text-foreground/40">Places:</span>{" "}
+                                  {item.relatedPlaces.map((p, i) => (
+                                    <span key={p.slug}>
+                                      <Link 
+                                        href={`/places/${p.slug}`}
+                                        className="underline hover:text-foreground/70"
+                                      >
+                                        {p.title}
+                                      </Link>
+                                      {i < item.relatedPlaces!.length - 1 && ", "}
+                                    </span>
+                                  ))}
+                                </p>
+                              )}
+                            </div>
+                          )}
+                          
                           <link itemProp="url" href={`https://slowmorocco.com/glossary#${item.id}`} />
                         </dd>
                       </div>

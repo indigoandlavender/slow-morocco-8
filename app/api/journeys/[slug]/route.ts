@@ -46,6 +46,7 @@ export async function GET(
       price: parseInt(journeyData.Price_EUR) || 0,
       startCity: journeyData.Start_City || "",
       focus: journeyData.Focus_Type || "",
+      destinations: journeyData.Destinations || "",
       journeyId: journeyData.Journey_ID || "",
       journeyType: journeyData.Journey_Type || "regular",
       epicPrice: journeyData.Epic_Price_EUR ? parseInt(journeyData.Epic_Price_EUR) : null,
