@@ -59,6 +59,15 @@ export default function JourneysPage() {
     { slug: "food", label: "Food" },
   ];
 
+  // Map filter slugs to actual data values
+  const focusMapping: Record<string, string[]> = {
+    desert: ["desert", "sahara"],
+    mountains: ["mountains", "trekking", "hiking", "adventure", "nature"],
+    culture: ["culture", "craft", "architecture", "heritage", "literature", "art"],
+    coast: ["coastal", "coast", "sea", "surf"],
+    food: ["food", "culinary"],
+  };
+
   useEffect(() => {
     Promise.all([
       fetch("/api/journeys?includeHidden=true").then(r => r.json()),
@@ -159,10 +168,14 @@ export default function JourneysPage() {
     }
 
     if (selectedFocus !== "all") {
-      filtered = filtered.filter((item) =>
-        item.focus?.toLowerCase().includes(selectedFocus.toLowerCase()) ||
-        item.category?.toLowerCase().includes(selectedFocus.toLowerCase())
-      );
+      const matchTerms = focusMapping[selectedFocus] || [selectedFocus];
+      filtered = filtered.filter((item) => {
+        const focusLower = item.focus?.toLowerCase() || "";
+        const categoryLower = item.category?.toLowerCase() || "";
+        return matchTerms.some(term => 
+          focusLower.includes(term) || categoryLower.includes(term)
+        );
+      });
     }
 
     setFilteredResults(filtered);
