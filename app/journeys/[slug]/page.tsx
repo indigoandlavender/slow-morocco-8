@@ -7,6 +7,7 @@ import Image from "next/image";
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import { linkGlossaryTermsText } from "@/lib/glossary-linker";
+import RelatedStories from "@/components/RelatedStories";
 import {
   IconClock,
   IconCamel,
@@ -62,6 +63,7 @@ interface Journey {
   heroImage: string;
   startCity: string;
   focus: string;
+  destinations: string;
   journeyId: string;
   journeyType?: string;
   epicPrice?: number;
@@ -584,6 +586,15 @@ export default function JourneyDetailPage() {
           </div>
         </div>
       </section>
+
+      {/* Related Stories from this Route */}
+      {journey.destinations && (
+        <RelatedStories 
+          destinations={journey.destinations} 
+          focus={journey.focus} 
+          limit={4} 
+        />
+      )}
 
       {/* More Journeys Carousel */}
       <section className="py-16 md:py-20 border-t border-border">

@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import StoryBody from "@/components/StoryBody";
 import ShareTools from "@/components/ShareTools";
+import RelatedJourneys from "@/components/RelatedJourneys";
 
 interface Story {
   slug: string;
@@ -540,6 +541,16 @@ export default function StoryPage() {
           </Link>
         </div>
       </article>
+
+      {/* Related Journeys - Full width section */}
+      {story && (story.region || story.tags) && (
+        <RelatedJourneys 
+          region={story.region || ""} 
+          tags={story.tags || ""} 
+          category={story.category || ""} 
+          limit={3} 
+        />
+      )}
     </div>
   );
 }
