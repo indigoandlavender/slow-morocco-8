@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSheetData, convertDriveUrl } from "@/lib/sheets";
+import { getDayTripBySlug, getDayTripAddons, getRouteById } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -11,15 +11,9 @@ export async function GET(
   try {
     const { slug } = await params;
     
-    // Get day trips
-    const dayTrips = await getSheetData("Day_Trips");
-    const addons = await getSheetData("Day_Trip_Addons");
-    const contentLibrary = await getSheetData("Content_Library");
-    
-    // Find the specific day trip
-    const tripData = dayTrips.find(
-      (t: any) => t.Slug === slug || t.Slug === decodeURIComponent(slug)
-    );
+    // Get day trip from Supabase
+    const tripData = await getDayTripBySlug(slug) || 
+                     await getDayTripBySlug(decodeURIComponent(slug));
 
     if (!tripData) {
       return NextResponse.json(
@@ -28,53 +22,46 @@ export async function GET(
       );
     }
 
-    // Get the route narrative from Content_Library
-    const routeId = tripData.Route_ID || "";
-    const routeData = contentLibrary.find((r: any) => r.Route_ID === routeId);
+    // Get the route narrative from routes table
+    const routeId = tripData.route_id || "";
+    const routeData = routeId ? await getRouteById(routeId) : null;
 
     // Format day trip
     const dayTrip = {
-      slug: tripData.Slug || "",
+      slug: tripData.slug || "",
       routeId: routeId,
-      title: tripData.Title || "",
-      shortDescription: tripData.Short_Description || "",
-      durationHours: parseInt(tripData.Duration_Hours) || 0,
-      priceMAD: parseFloat(tripData.Final_Price_MAD) || 0,
-      priceEUR: parseFloat(tripData.Final_Price_EUR) || 0,
-      departureCity: tripData.Departure_City || "Marrakech",
-      category: tripData.Category || "",
-      heroImage: convertDriveUrl(tripData.Hero_Image_URL || ""),
-      includes: (tripData.Includes || "").split("|").filter(Boolean),
-      excludes: (tripData.Excludes || "").split("|").filter(Boolean),
-      meetingPoint: tripData.Meeting_Point || "",
-      // From Content_Library
-      narrative: routeData?.Route_Narrative || "",
-      fromCity: routeData?.From_City || "Marrakech",
-      toCity: routeData?.To_City || "",
-      viaCities: routeData?.Via_Cities || "",
-      travelTime: routeData?.Travel_Time_Hours || "",
-      activities: routeData?.Activities || "",
-      difficulty: routeData?.Difficulty_Level || "",
-      region: routeData?.Region || "",
-      routeImage: convertDriveUrl(routeData?.Image_URL_1 || ""),
+      title: tripData.title || "",
+      shortDescription: tripData.short_description || "",
+      durationHours: tripData.duration_hours || 0,
+      priceMAD: tripData.final_price_mad || 0,
+      priceEUR: tripData.final_price_eur || 0,
+      departureCity: tripData.departure_city || "Marrakech",
+      category: tripData.category || "",
+      heroImage: tripData.hero_image_url || "",
+      includes: (tripData.includes || "").split("|").filter(Boolean),
+      excludes: (tripData.excludes || "").split("|").filter(Boolean),
+      meetingPoint: tripData.meeting_point || "",
+      // From routes table
+      narrative: routeData?.route_narrative || "",
+      fromCity: routeData?.from_city || "Marrakech",
+      toCity: routeData?.to_city || "",
+      viaCities: routeData?.via_cities || "",
+      travelTime: routeData?.travel_time_hours || "",
+      activities: routeData?.activities || "",
+      difficulty: routeData?.difficulty_level || "",
+      region: routeData?.region || "",
+      routeImage: routeData?.image_url || "",
     };
 
     // Get applicable addons for this trip
-    const applicableAddons = addons
-      .filter((a: any) => {
-        const pub = String(a.Published || "").toLowerCase().trim();
-        if (!(pub === "true" || pub === "yes" || pub === "1")) return false;
-        
-        const appliesTo = (a.Applies_To || "").split("|");
-        return appliesTo.includes(slug);
-      })
-      .map((a: any) => ({
-        id: a.Addon_ID || "",
-        name: a.Addon_Name || "",
-        description: a.Description || "",
-        priceMAD: parseFloat(a.Final_Price_MAD_PP) || 0,
-        priceEUR: parseFloat(a.Final_Price_EUR_PP) || 0,
-      }));
+    const addons = await getDayTripAddons(slug);
+    const applicableAddons = addons.map((a) => ({
+      id: a.addon_id || "",
+      name: a.addon_name || "",
+      description: a.description || "",
+      priceMAD: a.final_price_mad_pp || 0,
+      priceEUR: a.final_price_eur_pp || 0,
+    }));
 
     return NextResponse.json({
       success: true,
